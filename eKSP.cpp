@@ -42,14 +42,6 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
     //float sim;
 	double sim1;
 
-    /*label lTmp;
-
-    lTmp.pre = -1;
-    lTmp.post = -1;
-    lTmp.parent = -1;
-    vector<label> vLabel(nodeNum, lTmp);
-    intervalLabel(ID1, vSPT, vSPTParent, vLabel); //ID1 is root*/
-
     vector<int> vPath;
     vector<int> vPathEdge;
     vPath.push_back(ID2);
@@ -66,8 +58,6 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
             int eID = adjListEdgeR[oldP][i].second;
             if(eID != e)
                 mArc.insert(make_pair(vEdgeReducedLength[eID], eID));
-            //	else
-            //		cout << "Skip " << e << endl;
         }
         oldP = p;
         vPathEdge.push_back(e);
@@ -75,7 +65,6 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
         p = vSPTParent[p];
     }
     vmArc.push_back(mArc);
-    //cout << mArc.size() << endl;
     reverse(vPath.begin(), vPath.end());
     reverse(vPathEdge.begin(), vPathEdge.end());
     unordered_map<int, int> mPos;
@@ -101,11 +90,9 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
         pcount++;
 		popPath++;
         qPath.extract_min(topPathID, topPathDistance);
-        //cout << topPathID << "...." << topPathDistance << endl;
         if(topPathDistance < oldDistance)
             cout<< "Error" <<endl;
         oldDistance = topPathDistance;
-        // cout << endl << pcount << "\t" << topPathDistance  << "\t" << kResults.size() << endl;
 
         //Loop Test
         unordered_set<int> us;
@@ -116,10 +103,7 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
                 us.insert(v);
             else
             {
-				//cout << topPathID << endl;
-				//cout << v << endl; 
                 bTopLoop = true;
-                //cout << "Top Loop!" << endl;
                 break;
             }
         }
@@ -140,18 +124,14 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
 				pResult.push_back(pTmp); 
             }
             else {
-                //for (int i = 0; i < vvResult.size(); i++)
 				t1 = std::chrono::high_resolution_clock::now(); 
 				for(int i = 0; i < pResult.size(); i++)
                 {
-                //for (auto m = vvResult[i].begin(); m != vvResult[i].end(); m++) {
 					for (auto ie = vvPathCandidateEdge[topPathID].begin(); ie != vvPathCandidateEdge[topPathID].end(); ie++) {
 						if(pResult[i].find(*ie) != pResult[i].end()){
-                        //if (*ie == *m) {
 							addLength += vEdge[*ie].length;
                         }
                     }
-                    //}
 					//Sim 1
                     //sim1 = addLength / (kResults[i] + topPathDistance - addLength);
 					
@@ -160,8 +140,7 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
 
 					//Sim 3
 					//sim1 = sqrt((addLength*addLength) / ((double)kResults[i]*(double)topPathDistance)); 
-//					cout << addLength * addLength << "\t" << (double)kResults[i] * (double)topPathDistance << "\t" << kResults[i] << "\t" << topPathDistance << "\t" << (addLength*addLength) / (kResults[i]*topPathDistance) << endl;  
-//					cout << sim1 << endl;	
+					
 					//Sim 4
 					/*int maxLength;
 					if(addLength > topPathDistance)
@@ -183,7 +162,6 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
 				time_span = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
 				SimTime += time_span.count(); 
                 if (sim1 <= t) {
-					//cout << topPathID << endl;
                     cout << "sim: " << sim1 << " topPathID: " << topPathID<< endl;
                     kResults.push_back(topPathDistance);
                     vvResult.push_back(vvPathCandidateEdge[topPathID]);
@@ -195,39 +173,15 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
 						pTmp2.insert(*ie);
 					}
 					pResult.push_back(pTmp2);
-					//vResultThreshold.push_back(vDistance[topPathID] * t);
                 }
             }
-
-			/*vvResult.push_back(vvPathCandidateEdge[topPathID]);
-            kResults.push_back(topPathDistance);
-            vkPath.push_back(vvPathCandidate[topPathID]);
-            vResultID.push_back(topPathID);
-
-            for (auto m = vvResult[0].begin(); m != vvResult[0].end(); m++) {
-                for (auto ie = vvPathCandidateEdge[topPathID].begin();
-                    ie != vvPathCandidateEdge[topPathID].end(); ie++) {
-					if (*ie == *m) {
-						addLength += vEdge[*ie].length;
-                    }
-                }
-			}
-			sim.push_back(addLength / kResults[0]);
-			//cout << "sim: " << sim << " topPathID: " << topPathID << endl;
-			//popPath++;
-//			cout << kResults.size()  << endl;*/
         }
         vector<int> vTwo;
         vTwo.push_back(topPathID);
-        //cout << vFather[topPathID] << endl;
         if(vFather[topPathID] != -1 &&  !vmArc[vFather[topPathID]].empty())
             vTwo.push_back(vFather[topPathID]);
-        //cout << topPathID << "...." << vFather[topPathID] << endl;
-        //int count = 0;
         for(auto& pID : vTwo)
         {
-            //cout << pID << endl;
-            //count++;
             bool bLoop = true;
             while(bLoop)
             {
@@ -261,34 +215,14 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
                     else
                     {
                         bFixedLoop = true;
-                        //cout << "Loop !" << endl;
                         break;
                     }
-					/*if(vvPathCandidate[pID][i] == eNodeID1)
-					{
-						//cout << "loop" << endl;
-						bFixedLoop = true;
-						break;
-					}*/
-                   /* if(vLabel[eNodeID1].pre < vLabel[vvPathCandidate[pID][i]].pre || vLabel[eNodeID1].post > vLabel[vvPathCandidate[pID][i]].post)
-                        continue;
-                    else
-                    {
-						bFixedLoop = true;
-						break;
-					}
-                     */  
                 }
 
                 if(bFixedLoop)
                     continue;
-                //countNumber += 1;
                 int distTmp = vDistance[pID] - vSPTDistance[eNodeID2] + vEdge[mineID].length;
                 bLoop = false;
-
-
-//				cout << "eNodeID1:" << eNodeID1 << "\t" << "eNodeID2:" << eNodeID2 << endl;
-//				cout << "Previous:" << vvPathCandidate[pID][vmPathNodePos[pID][eNodeID2]-1] << endl;
 
                 //Traverse the non-fixed part: the tree
                 multimap<int, int> mArcTmp;
@@ -307,19 +241,6 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
                         int dTmp = distTmp + vEdge[reID].length;
 
 						//loop Test
-                        /*bool fLoop = false;
-                        for(int i = vmPathNodePos[pID][eNodeID2]; i < (int)vvPathCandidate[pID].size(); i++)
-                        {
-                            if(vLabel[eID1].pre < vLabel[vvPathCandidate[pID][i]].pre || vLabel[eID1].post > vLabel[vvPathCandidate[pID][i]].post)
-                                continue;
-                            else
-                            {
-                                fLoop = true;
-                                break;
-                            }
-                        }
-                        if(fLoop == true)
-                            continue;*/
                         if(sE.find(eID1) != sE.end()) //Loop Test
                             continue;
 
@@ -340,10 +261,8 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
                 }
 
                 int dist = vDistance[pID] - vSPTDistance[eNodeID2] + vSPTDistance[eNodeID1] + vEdge[mineID].length;
-//				cout << "New Dist:" << dist << endl << endl;
                 vDistance.push_back(dist);
                 vFather.push_back(pID);
-                //countNumber += 1;
                 qPath.update(vDistance.size()-1, dist);
 
                 reverse(vPath.begin(), vPath.end());
@@ -367,7 +286,6 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
                 }
 
                 vmArc.push_back(mArcTmp);
-                //cout << mArcTmp.size() << endl;
                 vvPathCandidate.push_back(vPath);
                 vvPathCandidateEdge.push_back(vPathEdge);
             }
@@ -386,6 +304,5 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
 		cout << "Sim Time:" << SimTime << endl;
 		cout << "eKSP countNumber: "<< countNumber << " Pop Path: " << popPath << endl;
 	}
-	//cout << " Pop Path Test: " << popPathTest << endl;
     return -1;
 }

@@ -5,7 +5,6 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
-#include "tools.h"
 #include "heap.h" 
 #include <stdlib.h>
 #include <unordered_map>

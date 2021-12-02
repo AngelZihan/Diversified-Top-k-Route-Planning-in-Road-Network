@@ -32,5 +32,5 @@ $ ./DKSP
 | Query File | main.cpp | Change the 'queryFilename' address |
 | Algorithm | main.cpp | Uncomment the algorithm |
 | Path Number | main.cpp | Change the 'k' value |
-| Similarity Threshold | Change the 't' value |
+| Similarity Threshold | main.cpp | Change the 't' value |
 | Similarity method | Algorithm File | Uncomment the similarity method and comment all others|

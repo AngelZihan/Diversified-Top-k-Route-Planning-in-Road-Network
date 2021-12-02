@@ -34,3 +34,7 @@ $ ./DKSP
 | Path Number | main.cpp | Change the 'k' value |
 | Similarity Threshold | main.cpp | Change the 't' value |
 | Similarity method | Algorithm File | Uncomment the similarity method and comment all others|
+
+## Running Result
+
+The running result shows the similarity of each path, path ID, running time, generated path number and the length of each path.

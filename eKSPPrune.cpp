@@ -84,8 +84,6 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
         e = vSPTParentEdge[p];
         p = vSPTParent[p];
     }
-
-    //cout << mArc.size() << endl;
     vmArc.push_back(mArc);
 
     reverse(vPath.begin(), vPath.end());
@@ -132,11 +130,9 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
     bool bError = false;
     while((int)kResults.size() < k && !qPath.empty())
     {
-     //   cout << kResults.size() << " k: " << k << endl; 
         float addLength = 0;
         pcount++;
         qPath.extract_min(topPathID, topPathDistance);
-    //    cout << topPathID << "\t" << topPathDistance << endl;
         if(topPathDistance < oldDistance)
             cout<< "Error" <<endl;
         oldDistance = topPathDistance;
@@ -173,46 +169,6 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
 				vResultThreshold.push_back(vDistance[topPathID] * t);
 			}
 			
-          /*  else {
-
-		//		if(vvPathCandidate[topPathID][0] == ID1)
-		//		{
-                for (int i = 0; i < vvResult.size(); i++)
-                {
-                    for (auto m = vvResult[i].begin(); m != vvResult[i].end(); m++) {
-                        for (auto ie = vvPathCandidateEdge[topPathID].begin();
-                             ie != vvPathCandidateEdge[topPathID].end(); ie++) {
-                            if (*ie == *m) {
-                                addLength += vEdge[*ie].length;
-                            }
-                        }
-                    }
-
-
-
-                    //sim = addLength / (kResults[i] + topPathDistance - addLength);
-					sim1 = addLength / kResults[i]; 
-					if(topPathID == 41)  
-					{
-						cout <<  "41:" << sim1 << endl; 
-						for(auto& id :vvPathCandidate[topPathID]) 
-							cout << id << "\t";
-						cout << endl;
-					}
-                    addLength = 0;
-                    if (sim1 > t)
-                        break;
-                }
-                if (sim1 <= t) {
-					//cout << topPathID << endl;
-                    cout << "sim: " << sim1 << " topPathID: " << topPathID<< endl;
-                    kResults.push_back(topPathDistance);
-                    vvResult.push_back(vvPathCandidateEdge[topPathID]);
-                    vkPath.push_back(vvPathCandidate[topPathID]);
-                    vResultID.push_back(topPathID);
-                }
-		//		}
-            }*/
             else{
                 for (int i = 0; i < vResultID.size(); i++) {
                     bool vFind = false;
@@ -225,19 +181,6 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
                             sim = simAdd / kResults[i];
                         }
                     }
-                    /*if(vFind == false)
-                    {
-                        for (auto m = vvResult[i].begin(); m != vvResult[i].end(); m++) {
-                            for (auto ie = vvPathCandidateEdge[topPathID].begin();
-                                 ie != vvPathCandidateEdge[topPathID].end(); ie++) {
-                                if (*ie == *m) {
-                                    addLength += vEdge[*ie].length;
-                                }
-                            }
-                        }
-                        sim = addLength / kResults[i];
-                        addLength = 0;
-                    }*/
                     if(vFind == false)
                     {
                         for (auto ie = vvPathCandidateEdge[topPathID].begin(); ie != vvPathCandidateEdge[topPathID].end(); ie++) {
@@ -286,7 +229,6 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
 					}
 					pResult.push_back(pTmp2);
 					vResultThreshold.push_back(vDistance[topPathID] * t);
-			//		break;
                 }
             }
         }
@@ -349,30 +291,6 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
                 int e = vSPTParentEdge[p];
                 int dist = vDistance[pID] - vSPTDistance[eNodeID2] + vSPTDistance[eNodeID1] + vEdge[mineID].length;
                 vDistance.push_back(dist);
-				//cout << "distance size: " << vDistance.size() << endl;
-				//cout << "Here!" << endl;
-
-                /*dEdge.push_back(vEdge[mineID].length);
-                int dist = vDistance[pID] - vSPTDistance[eNodeID2] + vSPTDistance[eNodeID1] + vEdge[mineID].length;
-                vDistance.push_back(dist);
-                if (bPath[pID])
-                {
-                    if(pID == 0)
-                    {
-                        vector<int> tmpAnc;
-                        tmpAnc.push_back(pID);
-                        vAncestor.push_back(tmpAnc);
-                    }
-                    else{
-                        vAncestor.push_back(vAncestor[pID]);
-                        vAncestor[vDistance.size()-1].push_back(pID);
-                        //cout << vAncestor[vDistance.size()-1].size() << " pID:" << vAncestor[vDistance.size()-1][vAncestor[vDistance.size()-1].size()-1]<< endl;
-                    }
-                }
-                else{
-                    vAncestor.push_back(vAncestor[pID]);
-                }*/
-
 
 				vector<float> addLength2;
 				vector<float> sim2;
@@ -382,12 +300,8 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
 				}
 
 				bool bFixSim = true;
-				//cout << "Here!" << endl;
-				//for(int j = vvPathCandidate[pID].size()-1; j-1 > vmPathNodePos[pID][eNodeID2]; j--)
 				for(int j = vmPathNodePos[pID][eNodeID2]; j < vvPathCandidateEdge[pID].size(); j++)
 				{
-					//if(vvPathCandidate.size() == 40)
-						//cout << vvPathCandidate[pID][j] << endl;
 					for(int i = 0; i < vvResult.size(); i++)
 					{
 						if(pResult[i].find(vvPathCandidateEdge[pID][j]) != pResult[i].end())
@@ -401,106 +315,9 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
 					if(!bFixSim)
 						break;
 				}
-				/*if(!bFixSim)
-					break;*/
-
-				//cout << "Here!" << endl;
-				//bool bAddLengthSim;
-				/*vector<float> vTmpAddLength2;
-				vTmpAddLength2 = vPathAddLength[pID];
-				vPathAddLength.push_back(vTmpAddLength2);*/
-				//cout << "PathID: " << vDistance.size()-1 << "vPathAddLength size: "<< vPathAddLength[vDistance.size()-1].size() << endl;
-				//bool bSize = true;
-				//int n = vvResult.size();
-				//cout << n << endl;
-				/*while(bSize)
-				{
-					if(vPathAddLength[pID].size() < n){
-						vPathAddLength[vDistance.size()-1].push_back(0);
-						n--;
-					}
-					else
-						bSize = false;
-				}*/
-				
-				/*for(int j = vmPathNodePos[pID][eNodeID2]; j < vvPathCandidateEdge[pID].size(); j++)
-				{
-					for(int i = 0; i < vvResult.size(); i++)
-					{
-						if(pResult[i].find(vvPathCandidateEdge[pID][j]) != pResult[i].end())
-								vPathAddLength[vDistance.size()-1][i] += vEdge[vvPathCandidateEdge[pID][j]].length;
-						if( vPathAddLength[vDistance.size()-1][i]> vResultThreshold[i])
-						{
-							bAddLengthSim = false;
-							break;
-						}
-					}
-					if(!bAddLengthSim)
-						break;
-				}*/
-				//cout << "current size: " << vPathAddLength[vDistance.size()-1].size() << " pID size: " << vPathAddLength[pID].size() << endl;
-				/*for(int i = 0; i < vvResult.size(); i++)
-				{
-					if(vPathAddLength[vDistance.size()-1][i] == 0)
-					{
-						if(vResultID[i] == pID)
-						{
-							vPathAddLength[vDistance.size()-1][i] = vSPTDistance[ID2] - vSPTDistance[eNodeID2];
-							if(vPathAddLength[vDistance.size()-1][i] > vResultThreshold[i])
-							{
-								bAddLengthSim = false;
-								break;
-							}
-						}
-						else
-						{
-							for(int j = vmPathNodePos[pID][eNodeID2]; j < vvPathCandidateEdge[pID].size(); j++){
-								if(pResult[i].find(vvPathCandidateEdge[pID][j]) != pResult[i].end())
-									vPathAddLength[vDistance.size()-1][i] += vEdge[vvPathCandidateEdge[pID][j]].length;
-								if(vPathAddLength[vDistance.size()-1][i] > vResultThreshold[i])
-								{
-									bAddLengthSim = false;
-									break;
-								}
-							}
-						}
-					}
-					else{
-						for(int j = vmPathNodePos[pID][eNodeID2]; j < vmPathNodePos[pID][vPathDeviation[pID]]; j++){
-							if(pResult[i].find(vvPathCandidateEdge[pID][j]) != pResult[i].end())
-								vPathAddLength[vDistance.size()-1][i] += vEdge[vvPathCandidateEdge[pID][j]].length;
-							if(vPathAddLength[vDistance.size()-1][i] > vResultThreshold[i])
-							{
-								bAddLengthSim = false;
-								break;
-							}
-						}
-					}
-					if(!bAddLengthSim)
-						break;
-				}*/
-				/*if(!bFixSim)
-					break;*/
-				/*if(bFixSim ){
-					if(addLength2Test != vPathAddLengthTest)
-						cout << "pID: " << pID << " addLength2Test: " << addLength2Test << " vPathAddLengTest:" << vPathAddLengthTest << endl;
-				}*/
-				/*for(int i = 0; i < vvResult.size(); i++)
-				{	
-					if(addLength2[i] != vPathAddLength[vDistance.size()-1][i] && addLength2[i] <= vResultThreshold[i])
-						cout << "pID: " << pID << " i: " << i << " addLength2: " << addLength2[i] << " vPathAddLengTest:" << vPathAddLength[vDistance.size()-1][i] << endl;
-				}*/
-				//cout << addLength2[0] << vPathAddLength[vDistance.size()-1][0]
 				bool bSim = true;
 
-				/*if(vvPathCandidate.size() == 41) 
-				{
-					cout << "fixed sim:" << sim2[0] << "\t" << addLength2[0] << "\t" << kResults[0] << endl;
-				}*/
-
-
                 while(p != -1 && bFixSim)
-                //while(p != -1 && bAddLengthSim)
 				{
 					sE.insert(p);
                     if(bSim)
@@ -509,7 +326,6 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
                         {
                             int reID = adjListEdgeR[p][i].second;
                             int eID1 = vEdge[reID].ID1;
-                            //int dTmp = distTmp + vEdge[reID].length;
 
                             if(sE.find(eID1) != sE.end())
                                 continue;
@@ -523,23 +339,8 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
 									{
 										if((addLength2[i] + vEdge[reID].length) > vResultThreshold[i])
 											breID = false;
-										//cout << vPathAddLength[vDistance.size()-1][i] << " vEdge: " << vEdge[reID].length << " vResultT: " << vResultThreshold[i] << endl;
-										//cout << "j: " << j << "size: " << vPathAddLength[vDistance.size()-1].size() << endl;
-										//cout << vPathAddLength[vDistance.size()-1][j] << endl;
-										/*if(vPathAddLength[vDistance.size()-1][j] + vEdge[reID].length > vResultThreshold[j])
-											breID = false;*/
-										//vPathAddLength[vDistance.size()-1][i] += vEdge[reID].length;
 										break;
 									}
-									/*for (auto m = vvResult[i].begin(); m != vvResult[i].end(); m++)
-									{
-										if(reID == *m)
-										{
-											if((addLength2[i] + vEdge[reID].length) / kResults[i] > t) 
-												breID = false;
-											break;
-										} 
-									}*/
 									if(!breID)
 										break;
 								}
@@ -556,90 +357,15 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
 							if(pResult[i].find(e) != pResult[i].end())
 							{
 								addLength2[i] += vEdge[e].length; 
-								//vPathAddLength[vDistance.size()-1][i] == vEdge[e].length;
-						/*		if(vvPathCandidate.size()==1456)
-								{
-									count++;
-									cout << "pResult " << e << endl;
-								}
-*/
-						//		break;
 							}
-						/*	for (auto m = vvResult[i].begin(); m != vvResult[i].end(); m++)
-							{
-								if(e == *m){
-									if(vvPathCandidate.size()==1456)
-									{
-										count++;
-										cout << "vvResult " << e << endl; 
-										if(count == 1)
-											cout << "ERROR" << endl;
-									}
-							//		addLength2[i] += vEdge[e].length;
-									break;
-								}
-							}*/
 							if(addLength2[i] > vResultThreshold[i]) 
-							//if(vPathAddLength[vDistance.size()-1][i] > vResultThreshold[i])
 							{
 								bSim = false;
 								break;
 							}
-						//	sim2[i] = addLength2[i] / kResults[i];
-								/*if(vvPathCandidate.size() == 40) 
-									cout << sim2[i] << endl;*/
-						/*	if(sim2[i] > t){ 
-
-								bSim = false;
-								//p = -1;
-								break;
-							}*/
 						}
-
-					    /*vPath.push_back(p);
-						vPathEdge.push_back(e);
-						distTmp += vEdge[e].length;
-
-					    p = vSPTParent[p];
-						if(vSPTParent[p] == -1)
-					    {
-							vPath.push_back(p);
-							break;
-						}
-						e = vSPTParentEdge[p];*/
                     }
 
-					//bool bSim = true;
-					
-                    /*for(int i = 0; i < vvResult.size(); i++)
-                    {
-                        for (auto m = vvResult[i].begin(); m != vvResult[i].end(); m++)
-                        {
-                            if(e == *m){
-                                addLength2[i] += vEdge[e].length;
-								break;
-							}
-                        }
-                        sim2[i] = addLength2[i] / kResults[i];
-                        if(sim2[i] > t){
-							bSim = false;
-							//p = -1;
-							break;
-						}
-					}*/
-
-					/*vPath.push_back(p);
-					vPathEdge.push_back(e);
-					//distTmp += vEdge[e].length;
-					p = vSPTParent[p];
-					if(vSPTParent[p] == -1)
-					{
-						vPath.push_back(p);
-						break;
-					}
-						e = vSPTParentEdge[p];*/
-			//		if(bSim)
-			//			break;
 					if(bSim)
 					{
 						vPath.push_back(p);
@@ -657,53 +383,13 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
 						vPath.push_back(p);
 						vPathEdge.push_back(e);
 					    p = vSPTParent[p];
-				//		if(vSPTParent[p] == -1)
-				//	    {
-							vPath.push_back(p);
-						//	break;
-				//		}
-						/*if(vvPathCandidate.size() == 41)
-						{
-							double l = 0;
-							double l2 = 0;
-							for(auto& e2: vPathEdge)  
-							{
-								for(auto m = vvResult[0].begin(); m != vvResult[0].end(); m++) 
-								{
-									if(e2== *m)
-									{ 
-										l += vEdge[e2].length;  
-										break;
-									}
-								}
-							}
-
-							for(int j = vmPathNodePos[pID][eNodeID2]; j < vvPathCandidateEdge[pID].size(); j++)  
-							{
-								for(auto m = vvResult[0].begin(); m != vvResult[0].end(); m++) 
-								{
-									if(vvPathCandidateEdge[pID][j]== *m)
-									{ 
-										l2 += vEdge[vvPathCandidateEdge[pID][j]].length;   
-										break;
-									}
-								}
-							}
-
-							cout << "BREAK:" <<   l2 / kResults[0] << "\t" << l2 << "\t" << kResults[0] <<  endl;
-							cout << "BREAK:" <<   (l+l2) / kResults[0] << endl; 
-						}*/
+						vPath.push_back(p);
 						break;
 					}
 				}
-				/*if(!bSim)
-					break;*/
                 dEdge.push_back(vEdge[mineID].length);
-                /*int dist = vDistance[pID] - vSPTDistance[eNodeID2] + vSPTDistance[eNodeID1] + vEdge[mineID].length;
-                vDistance.push_back(dist);*/
                 if (bPath[pID])
                 {
-					//cout << "if" << endl;
                     if(pID == 0)
                     {
                         vector<int> tmpAnc;
@@ -713,23 +399,17 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
                     else{
                         vAncestor.push_back(vAncestor[pID]);
                         vAncestor[vDistance.size()-1].push_back(pID);
-                        //cout << vAncestor[vDistance.size()-1].size() << " pID:" << vAncestor[vDistance.size()-1][vAncestor[vDistance.size()-1].size()-1]<< endl;
                     }
                 }
                 else{
-					//cout << "else" << endl;
                     vAncestor.push_back(vAncestor[pID]);
                 }
-				//cout << vAncestor.size() << endl;
 
                 for(int i = 0; i < vAncestor[vDistance.size()-1].size(); i++)
                 {
                     // find LCA
                     int _p, _q;
-					//cout << "Distance size 2: "<< vDistance.size() << endl;
-				//	cout << "Ancestor size: "<< vAncestor[vDistance.size()-1].size() << " i: " << i << "-p" << _p << endl;
                     _p = rEulerSeq[vPathDevPrime[vAncestor[vDistance.size()-1][i]]];
-					//cout << _p << endl;
                     _q = rEulerSeq[eNodeID1];
                     int LCA = LCAQuery(_p, _q, vSPT,  vSPTHeight,vSPTParent);
                     int dLCA = vSPTDistance[LCA];
@@ -746,17 +426,10 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
                         vPathLCA[vDistance.size()-1].push_back(dLCA);
                         vPathLCANode[vDistance.size()-1].push_back(LCA);
                     }
-					//vector<float> vTmpAddLength2;
-					/*if(i == 0)
-					{
-						vTmpAddLength2.push_back()
-					}*/
-                    // find middle fix part
                     //case 5
 					
 					if(i == vPathLCANode[pID].size())
 					{
-						//cout << "Here!" << endl;
 						vPathLCANode[pID][i] = vPathLCANode[pID][0];
 					}
                     vector<float> vTmpdFix;
@@ -768,19 +441,15 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
                             float dFix = vSPTDistance[vPathLCANode[pID][i]] - vSPTDistance[eNodeID2] + vPathFix[pID][0];
                             vTmpdFix.push_back(dFix);
                             vPathFix.push_back(vTmpdFix);
-							//vTmpAddLength2.push_back(dFix);
-							//vPathAddLength.push_back(vTmpAddLength2);
                         }
                         else{
                             if(vAncestor[vDistance.size()-1][i] == pID && bPath[pID]){
                                 vPathFix[vDistance.size()-1].push_back(dFix);
-								//vPathAddLength[vDistance.size()-1].push_back(dFix);
 
 							}
                             else{
                                 float dFix = vSPTDistance[vPathLCANode[pID][i]] -vSPTDistance[eNodeID2] + vPathFix[pID][i];
                                 vPathFix[vDistance.size()-1].push_back(dFix);
-							//	vPathAddLength[vDistance.size()-1].push_back(dFix);
                             }
                         }
                     }
@@ -814,16 +483,11 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
                 //Pos stop at eNodeID1 as it is boundary of fixed
                 for(i = 0; i < (int)vPath.size(); i++) 
 				{
-					/*if(vvPathCandidate.size() == 40)
-					cout << vPath[i] << endl;*/
                     mE[vPath[i]] = i;
 				}
                 vmPathNodePos.push_back(mE);
                 vPath.push_back(eNodeID2);
                 vPathEdge.push_back(mineID);
-
-				/*if(vvPathCandidate[pID][vmPathNodePos[pID][eNodeID2]] != eNodeID2) 
-					cout << "ERROR" << endl;*/
 
                 for(int j = vmPathNodePos[pID][eNodeID2]; j+1 < (int)vvPathCandidate[pID].size(); j++)
                 {
@@ -836,8 +500,6 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
                 vvPathCandidate.push_back(vPath);
                 vvPathCandidateEdge.push_back(vPathEdge);
             }
-			/*if(!bFixSim)
-				continue;*/
 		}
 
 		if(countNumber >= 33836288){
@@ -852,7 +514,6 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
 	}
 	else{
 		cout << "eKSPPrune countNumber: "<< countNumber << " Pop Path Length: " << popPath << endl; 
-		//cout << "vDistance Size:" << vDistance.size() << "pcount: " << pcount<< endl;
 	}
     return -1;
 }

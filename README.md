@@ -11,7 +11,7 @@ There are four algorithms in this repository:
 
 ## Running
 
-Two steps to run these algorithm:
+Two steps to run these algorithms:
 
 The first step is to compile: 
 

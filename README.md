@@ -29,8 +29,8 @@ $ ./DKSP
 | Parameter | File | How to Change |
 | ------ | ------ | ------ |
 | Road File | main.cpp | Change the 'filename' address |
-| Query File | main.cpp | main.cpp | Change the 'queryFilename' address |
-| Algorithm | main.cpp | main.cpp | Uncomment the algorithm |
-| Path Number | main.cpp | main.cpp | Change the 'k' value |
-| Similarity Threshold | main.cpp | Change the 't' value |
+| Query File | main.cpp | Change the 'queryFilename' address |
+| Algorithm | main.cpp | Uncomment the algorithm |
+| Path Number | main.cpp | Change the 'k' value |
+| Similarity Threshold | Change the 't' value |
 | Similarity method | Algorithm File | Uncomment the similarity method and comment all others|

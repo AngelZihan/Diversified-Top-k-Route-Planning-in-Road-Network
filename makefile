@@ -1,8 +1,8 @@
 CXX=g++ -std=c++17
 OPT=-O3
 
-DKSP: main.o graph.o eKSP.o cTKSPD.o eKSPCompare.o eKSPPrune.o -lpthread -lboost_system -lboost_thread
-	$(CXX) -g -o DKSP main.o graph.o eKSP.o cTKSPD.o eKSPCompare.o eKSPPrune.o -lpthread -lboost_system -lboost_thread
+DKSP: main.o graph.o eKSP.o cTKSPD.o eKSPCompare.o eKSPPrune.o DynamicSimilarity.o -lpthread -lboost_system -lboost_thread
+	$(CXX) -g -o DKSP main.o graph.o eKSP.o cTKSPD.o eKSPCompare.o eKSPPrune.o DynamicSimilarity.o -lpthread -lboost_system -lboost_thread
 
 graph.o:graph.cpp
 	$(CXX) -g -c $(OPT) graph.cpp
@@ -16,6 +16,8 @@ eKSPCompare.o: eKSPCompare.cpp
 	$(CXX) -g -c $(OPT) eKSPCompare.cpp
 eKSPPrune.o: eKSPPrune.cpp
 	$(CXX) -g -c $(OPT) eKSPPrune.cpp
+DynamicSimilarity.o: DynamicSimilarity.cpp
+	$(CXX) -g -c $(OPT) DynamicSimilarity.cpp
 	
 clean:
 	rm *.o

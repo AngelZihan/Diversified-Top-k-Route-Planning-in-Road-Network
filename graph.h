@@ -108,11 +108,14 @@ public:
 
     void SPT(int root, vector<int>& vSPTDistance, vector<int>& vSPTParent, vector<int>& vSPTHeight, vector<int>& vSPTParentEdge, vector<vector<int> >& vSPT);
     void rSPT(int root, vector<int>& vSPTDistance, vector<int>& vSPTParent, vector<int>& vSPTParentEdge, vector<vector<int> >& vSPT);//reverse SP Tree
+    //void SPT(int root, int ID2, vector<int>& vSPTDistance, vector<int>& vSPTParent, vector<int>& vSPTHeight, vector<int>& vSPTParentEdge, vector<vector<int> >& vSPT);
+
 
     int cTKSPD(int ID1, int ID2, int k, vector<int>& kResults, double t, int& countNumber, int& popPath);
     int eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector<int> >& vkPath, double t, int& countNumber, int& popPath, vector<float>& sim, float &SimTime);
     int eKSPCompare(int ID1, int ID2, int k, vector<int>& kResults, vector<vector<int> >& vkPath, double t, int& countNumber, int& popPath, float& percentage, float &SimTime);
     int eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vector<int> >& vkPath, double t, int& countNumber, int& popPath);
+    int DynamicSimilarity(int ID1, int ID2, int k, vector<int>& kResults, vector<vector<int> >& vkPath, double t, int& countNumber, int& popPath);
     void FindRepeatedPath(vector<vector<int> >& vvPath);
 };
 

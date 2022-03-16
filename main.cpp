@@ -70,8 +70,13 @@ int main()
 	vector<int> eKSPPruneAverageLength;
 	vector<double> eKSPPrunePercentage;
 
+	vector<double> DynamicSimilarityTime;
+    vector<int> DynamicSimilarityCount;
+    vector<int> DynamicSimilarityPop;
+	vector<int> DynamicSimilarityAverageLength;
+
     int ID1, ID2;
-    for (int i = 0; i < ID1List.size(); ++i) {
+    for (int i = 0; i < ID1List.size() - 60; ++i) {
         ID1 = ID1List[i];
         ID2 = ID2List[i];
 		cout << "ID1:" << ID1 << "\tID2:" << ID2 << endl;
@@ -188,6 +193,30 @@ int main()
 			cout << endl;
 		}
 
+		kResults.clear();
+        vkPath.clear();
+		sim.clear();
+        t1 = std::chrono::high_resolution_clock::now();
+        g.DynamicSimilarity(ID1, ID2, k, kResults, vkPath, t, countNumber, popPath);
+        t2 = std::chrono::high_resolution_clock::now();
+        time_span = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
+		if(popPath != -1){
+			DynamicSimilarityTime.push_back(time_span.count());
+			DynamicSimilarityCount.push_back(countNumber);
+			DynamicSimilarityPop.push_back(popPath);
+			cout << "DynamicSimilarity Time:" << time_span.count() << endl;
+			int DynamicSimilarityPathAverageLength = 0;
+			for(auto& d : kResults){
+				cout << d << "\t";
+				DynamicSimilarityPathAverageLength += d;
+			}
+			DynamicSimilarityAverageLength.push_back(DynamicSimilarityPathAverageLength / kResults.size());
+			cout << endl;
+			cout << "Path Average Length: " << DynamicSimilarityPathAverageLength / kResults.size() << endl;
+			cout << endl;
+			cout << endl;
+		}
+
     }
 
 	sumTime = 0;
@@ -272,6 +301,28 @@ int main()
 	meanLength = sumLength / eKSPPruneAverageLength.size();
 	cout << "Pair Size:" << eKSPPruneTime.size() << endl;
     cout  <<"eKSPPrune Average Time: " << meanTime << "\teKSPPrune Average Count: " << meanCount << "\teKSPPrune Average Pop: " << meanPop << " \teKSPPrune Average Length: " << meanLength<< endl;
+
+	sumTime = 0;
+    sumCount = 0;
+    sumPop = 0;
+	sumLength = 0;
+	sumPercentage = 0;
+	sumSimTime = 0;
+    for (int i = 0; i < DynamicSimilarityTime.size(); i++)
+    {
+        sumTime += DynamicSimilarityTime[i];
+        sumCount += DynamicSimilarityCount[i];
+        sumPop += DynamicSimilarityPop[i];
+		sumLength += DynamicSimilarityAverageLength[i];
+    }
+    meanTime = sumTime / DynamicSimilarityTime.size();
+    meanCount = sumCount / DynamicSimilarityCount.size();
+    meanPop = sumPop / DynamicSimilarityPop.size();
+	meanLength = sumLength / DynamicSimilarityAverageLength.size();
+
+	cout << "Pair Size:" << DynamicSimilarityTime.size() << endl;
+    cout  <<"DynamicSimilarity Average Time: " << meanTime << "\tDynamicSimilarity Average Count: " << meanCount << "\tDynamicSimilarity Pop: " << meanPop << " \tDynamicSimilarity Average Length: " << meanLength << endl;
+
 
     return 0;
 }

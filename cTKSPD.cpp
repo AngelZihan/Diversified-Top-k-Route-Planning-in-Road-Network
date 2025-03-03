@@ -78,12 +78,9 @@ int Graph::cTKSPD(int ID1, int ID2, int k, vector<int>& kResults,double t,int& c
         unordered_set<int> sRemovedNodeTmp;
         if (pWeight != 0) {
             popPath++;
-            /*kResults.push_back(pWeight);
-            vvResult.push_back(vvPathCandidate[topSpaceID]);*/
             float addLength = 0;
             if (vvResult.size() == 0)
             {
-                //cout << topSpaceID << "......" << lb << "......" << pWeight << endl;
                 kResults.push_back(pWeight);
                 vvResult.push_back(vvPathCandidateEdge[topSpaceID]);
                 for(auto ie = vvPathCandidateEdge[topSpaceID].begin(); ie != vvPathCandidateEdge[topSpaceID].end(); ie++)
@@ -95,10 +92,8 @@ int Graph::cTKSPD(int ID1, int ID2, int k, vector<int>& kResults,double t,int& c
             }
             else
             {
-                //cout << topSpaceID << "......" << lb << "......" << pWeight << endl;
                 for(int i = 0; i < pResult.size(); i++)
                 {
-                    //cout << i << "..." << pResult.size() << "..." << topSpaceID << "....." << preAddLength <<endl;
                     for(auto ie = vvPathCandidateEdge[topSpaceID].begin(); ie != vvPathCandidateEdge[topSpaceID].end(); ie++)
                     {
                         if (pResult[i].find(*ie) != pResult[i].end())
@@ -107,36 +102,30 @@ int Graph::cTKSPD(int ID1, int ID2, int k, vector<int>& kResults,double t,int& c
 					//Sim1
                     sim = addLength/(kResults[i]+pWeight-addLength);
 
-					/*//Sim 2 
-					sim = addLength / (2*kResults[i]) + addLength / (2*pWeight);
+					//Sim 2
+					//sim = addLength / (2*kResults[i]) + addLength / (2*pWeight);
 
 					//Sim 3
-					sim = sqrt((addLength*addLength) / ((double)kResults[i]*(double)pWeight));	
+					//sim = sqrt((addLength*addLength) / ((double)kResults[i]*(double)pWeight));
 
 					//Sim 4
-					int maxLength;
-					if(addLength > pWeight)
-						maxLength = addLength;
+					/*int maxLength;
+					if(kResults[i] > pWeight)
+						maxLength = kResults[i];
 					else
 						maxLength = pWeight;
-					sim = addLength / maxLength;
+					sim = addLength / maxLength;*/
 					
 					//Sim5
-					sim = addLength / kResults[i];*/
+//					sim = addLength / kResults[i];
 
-
-
-
-					//sim = (addLength + preAddLength)/(kResults[i]+pWeight-addLength-preAddLength);
-                    //cout << topSpaceID << "....." << sim << "...." << pWeight <<endl;
                     addLength = 0;
                     if (sim > t)
                         break;
                 }
-                //cout << sim << endl;
                 if (sim <= t)
                 {
-                    cout << sim << endl;
+                    //cout << sim << endl;
                     kResults.push_back(pWeight);
                     vvResult.push_back(vvPathCandidateEdge[topSpaceID]);
                     pa.clear();
@@ -166,7 +155,6 @@ int Graph::cTKSPD(int ID1, int ID2, int k, vector<int>& kResults,double t,int& c
             vector<int> vPreviousEdge;
             int subLength = 0;
             int i;
-            //cout << vPathParentPos[topSpaceID] << endl;
             for (i = 0; i < vPathParentPos[topSpaceID]; i++) {
                 vPreviousNode.push_back(vvPathCandidate[topSpaceID][i]);
                 vPreviousEdge.push_back(vvPathCandidateEdge[topSpaceID][i]);
@@ -176,7 +164,6 @@ int Graph::cTKSPD(int ID1, int ID2, int k, vector<int>& kResults,double t,int& c
             for (auto ie = vvPathCandidateEdge[topSpaceID].begin() + i; ie != vvPathCandidateEdge[topSpaceID].end(); ie++) {
                 int eID1 = vEdge[*ie].ID1;
                 int eID2 = vEdge[*ie].ID2;
-                //cout << eID1 << "," << eID2 << endl;
                 for (int j = 0; j < (int) adjList[eID1].size(); j++)
                 {
                     if (adjList[eID1][j].first == eID2)
@@ -203,7 +190,6 @@ int Graph::cTKSPD(int ID1, int ID2, int k, vector<int>& kResults,double t,int& c
                 vPathParentPos.push_back(ie - vvPathCandidateEdge[topSpaceID].begin());
                 vvPathRemovedEdge.push_back(vRemovedEdgeTmp);
                 vvPathRemovedNode.push_back(sRemovedNodeTmp);
-                //cout << vvPathCandidate[1].size() << endl;
                 int vlb = INF;
                 for (int i = 0; i < (int) adjList[eID1].size(); i++)
                 {
@@ -282,7 +268,6 @@ int Graph::cTKSPD(int ID1, int ID2, int k, vector<int>& kResults,double t,int& c
             if (lb2 > lb)
             {
                 lPath.update(topSpaceID, lb2, 0);
-				//cout << topSpaceID << " lb2: "<< lb2 << " lb: "<< lb<< endl;
             }
             else
             {
@@ -310,7 +295,6 @@ int Graph::cTKSPD(int ID1, int ID2, int k, vector<int>& kResults,double t,int& c
                 {
                     int mID1 = vEdge[*ie].ID1;
                     int mID2 = vEdge[*ie].ID2;
-                    //cout << mID1 << "," << mID2 << endl;
                     sRemovedNodeTmp.insert(mID1);
                     for (int i = 0; i < (int) adjList[mID1].size(); i++)
                     {
@@ -323,11 +307,9 @@ int Graph::cTKSPD(int ID1, int ID2, int k, vector<int>& kResults,double t,int& c
                     vRemovedEdgeTmp.push_back(*ie);
                 }
                 int dTmp = iBoundingAstar(eID1, ID2, sRemovedNodeTmp, vPath, vPathEdge, T) + subLength;
-                //int dTmp = DijkstraPath2(eID1, ID2, sRemovedNodeTmp, vPath, vPathEdge) + subLength;
 				vDistance[topSpaceID] = dTmp;
                 vvPathCandidate[topSpaceID].insert(vvPathCandidate[topSpaceID].end(), vPath.begin() + 1, vPath.end());
                 vvPathCandidateEdge[topSpaceID].insert(vvPathCandidateEdge[topSpaceID].end(), vPathEdge.begin(), vPathEdge.end());
-				//lPath.update(topSpaceID, dTmp, dTmp);
                 if(dTmp > 0)
                 {
                     lPath.update(topSpaceID, dTmp, dTmp);

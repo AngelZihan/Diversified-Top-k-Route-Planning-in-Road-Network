@@ -1,8 +1,11 @@
 #include "graph.h"
 
-int Graph::DynamicSimilarity(int ID1, int ID2, int k, vector<int>& kResults, vector<vector<int> >& vkPath, double t, int& countNumber, int& popPath)
+int Graph::DynamicSimilarity(int ID1, int ID2, int k, vector<int>& kResults, vector<vector<int> >& vkPath, double t, int& countNumber, int& popPath, float& AveSim, float& minSim, float& maxSim)
 {
     //Shortest Path Tree Info
+	AveSim = 0;
+	minSim = 1;
+	maxSim = 0;
     countNumber = 0;
     popPath = 0;
     vector<int> vSPTDistance(nodeNum, INF);
@@ -12,7 +15,7 @@ int Graph::DynamicSimilarity(int ID1, int ID2, int k, vector<int>& kResults, vec
     vector<int> vSPTChildren(nodeNum, -1);
     vector<int> vTmp;
     vector<vector<int>> vSPT(nodeNum, vTmp); //Tree from root
-    SPT(ID1, vSPTDistance, vSPTParent, vSPTHeight, vSPTParentEdge, vSPT);
+    SPT(ID1, ID2,vSPTDistance, vSPTParent, vSPTHeight, vSPTParentEdge, vSPT);
 
     //LCA
     vector<vector<float> > vPathLCA;
@@ -105,7 +108,6 @@ int Graph::DynamicSimilarity(int ID1, int ID2, int k, vector<int>& kResults, vec
     vTmpLCA.push_back(vSPTDistance[ID2]);
     vPathLCA.push_back(vTmpLCA);
     qPath.update(vvPathCandidate.size()-1, vSPTDistance[ID2]);
-    //qSim.update(1,0.1);
     vector<int> vResultID;
     int topPathID, topPathDistance;
     int qSimTopPathID, qSimTau, qSimTopPathDistance;
@@ -139,6 +141,7 @@ int Graph::DynamicSimilarity(int ID1, int ID2, int k, vector<int>& kResults, vec
         }
         if(!bTopLoop)
         {
+			float simCount = 0;
             //popPath++;
             int n = 0;
             if (vvResult.size() == 0)
@@ -158,6 +161,7 @@ int Graph::DynamicSimilarity(int ID1, int ID2, int k, vector<int>& kResults, vec
 
             else{
                 float simMax = 0;
+				float simMin = 1;
                 for (int i = 0; i < vResultID.size(); i++) {
                     bool vFind = false;
                     for(int j = 0; j < vAncestor[topPathID].size(); j++)
@@ -167,7 +171,7 @@ int Graph::DynamicSimilarity(int ID1, int ID2, int k, vector<int>& kResults, vec
                             vFind = true;
                             float simAdd = vPathFix[topPathID][j] + vPathLCA[topPathID][j] + mPathFix[i];
                             //Sim 1
-                            sim = simAdd / (kResults[i] + topPathDistance - simAdd);
+                            //sim = simAdd / (kResults[i] + topPathDistance - simAdd);
 
                             //Sim 2
                             //sim = simAdd / (2*kResults[i]) + simAdd / (2*topPathDistance);
@@ -176,19 +180,16 @@ int Graph::DynamicSimilarity(int ID1, int ID2, int k, vector<int>& kResults, vec
                             //sim = sqrt((simAdd*simAdd) / ((double)kResults[i]*(double)topPathDistance));
 
                             //Sim 4
+							//sim = simAdd / topPathDistance;
                             /*int maxLength;
-                            if(addLength > topPathDistance)
-                                maxLength = simAdd;
+                            if(kResults[i] > topPathDistance)
+                                maxLength = kResults[i];
                             else
                                 maxLength = topPathDistance;
                             sim = simAdd / maxLength;*/
 
                             //Sim 5
-                            //sim = simAdd / kResults[i];
-
-                            //sim = simAdd / kResults[i];
-                            //cout << mPathFix[i] << endl;
-                            //cout << (vPathLCA[topPathID] + vPathFix[topPathID][n] + mPathFix[i]) << endl;
+                            sim = simAdd / kResults[i];
                         }
                     }
                     if(vFind == false)
@@ -204,40 +205,47 @@ int Graph::DynamicSimilarity(int ID1, int ID2, int k, vector<int>& kResults, vec
                         //sim = addLength / kResults[i];
 
                         //Sim 1
-                        sim = addLength / (kResults[i] + topPathDistance - addLength);
+						//sim = addLength / (kResults[i] + topPathDistance - addLength);
                         //Sim 2
 						//sim = addLength / (2*kResults[i]) + addLength / (2*topPathDistance);
 
                         //Sim 3
-						//sim = sqrt((addLength*addLength) / ((double)kResults[i]*(double)topPathDistance));
+					//	sim = sqrt((addLength*addLength) / ((double)kResults[i]*(double)topPathDistance));
 
                         //Sim 4
+						//sim = kResults[i] / topPathDistance;
                         /*int maxLength;
-                        if(addLength > topPathDistance)
-                        	maxLength = addLength;
+                        if(kResults[i] > topPathDistance)
+                        	maxLength = kResults[i];
                         else
                         	maxLength = topPathDistance;
                         sim = addLength / maxLength;*/
 
                         //Sim 5
-                        //sim = addLength / kResults[i];
+                        sim = addLength / kResults[i];
                         addLength = 0;
                     }
+					simCount += sim;
                     if (sim > simMax)
                         simMax = sim;
-                    /*if (sim > t)
-                        break;*/
+					if (sim < simMin)
+						simMin = sim;
                 }
 
                 if (simMax <= t) {
-                    cout << "sim: " << sim << " topPath:" << topPathID << endl;
-                    kResults.push_back(topPathDistance);
+                    //cout << "sim: " << sim << " topPath:" << topPathID << endl;
+					AveSim += simCount;
+                    if(simMax > maxSim)
+						maxSim = simMax;
+					if(simMin < minSim)
+						minSim = simMin;
+					//cout << "max: " << maxSim << endl;
+					kResults.push_back(topPathDistance);
                     vvResult.push_back(vvPathCandidateEdge[topPathID]);
                     vkPath.push_back(vvPathCandidate[topPathID]);
                     vResultID.push_back(topPathID);
                     bPath[topPathID] = true;
                     mPathFix.push_back(vDistance[vFather[topPathID]] - vSPTDistance[vPathDeviation[topPathID]] + dEdge[topPathID]);
-                    //cout << topPathID << "..." << bPath[topPathID] << endl;
                     unordered_set<int> pTmp2;
                     for(auto ie = vvPathCandidateEdge[topPathID].begin(); ie != vvPathCandidateEdge[topPathID].end(); ie++)
                     {
@@ -254,20 +262,21 @@ int Graph::DynamicSimilarity(int ID1, int ID2, int k, vector<int>& kResults, vec
                     if(!qSim.empty())
                     {
                         qSim.extract_min(qSimTopPathID, qSimTau, qSimTopPathDistance);
-                        //qSim.extract_min(topPathID, qSimTau, topPathDistance);
-                        //cout << "qSimTau: " << qSimTau << " qSimSize: " << qSim.size()*10 << endl;
-                        //k =10000 delTau = 0.1
                         if (qSimTau <= (qSim.size()+1)*100)
                         {
                             float tNew= (float)qSimTau/1000000 + t;
                             cout << "sim: " << tNew << " qSimTopPath:" << qSimTopPathDistance << endl;
+							AveSim += simCount;
+							if(tNew > maxSim)
+								maxSim = tNew;
+							if(tNew < minSim)
+								minSim = tNew;
                             kResults.push_back(qSimTopPathDistance);
                             vvResult.push_back(vvPathCandidateEdge[qSimTopPathID]);
                             vkPath.push_back(vvPathCandidate[qSimTopPathID]);
                             vResultID.push_back(qSimTopPathID);
                             bPath[qSimTopPathID] = true;
                             mPathFix.push_back(vDistance[vFather[qSimTopPathID]] - vSPTDistance[vPathDeviation[qSimTopPathID]] + dEdge[qSimTopPathID]);
-                            //cout << topPathID << "..." << bPath[topPathID] << endl;
                             unordered_set<int> pTmp2;
                             for(auto ie = vvPathCandidateEdge[qSimTopPathID].begin(); ie != vvPathCandidateEdge[qSimTopPathID].end(); ie++)
                             {
@@ -275,7 +284,6 @@ int Graph::DynamicSimilarity(int ID1, int ID2, int k, vector<int>& kResults, vec
                             }
                             pResult.push_back(pTmp2);
                             t = tNew;
-                            //cout << t << endl;
                             qSim.clear();
                         }
                         else
@@ -431,7 +439,6 @@ int Graph::DynamicSimilarity(int ID1, int ID2, int k, vector<int>& kResults, vec
                                 int dFix = vSPTDistance[vPathLCANode[pID][i]] -vSPTDistance[eNodeID2] + vPathFix[pID][i];
                                 vPathFix[vDistance.size()-1].push_back(dFix);
                             }
-                            //cout << vPathFix[vDistance.size()-1][i] << endl;
                         }
                     }
                     else{
@@ -475,6 +482,9 @@ int Graph::DynamicSimilarity(int ID1, int ID2, int k, vector<int>& kResults, vec
             }
         }
     }
+	AveSim = AveSim / (kResults.size()*(kResults.size()-1)/2);
+	cout << "AveSim: " << AveSim << endl;
+	cout << " maxSim: " << maxSim << endl;
     cout << "DynamicSimilarity countNumber: "<< countNumber << " Pop Path: " << popPath << endl;
     return -1;
 }

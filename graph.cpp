@@ -1,7 +1,8 @@
 #include "graph.h"
 
-void Graph::SPT(int root, vector<int>& vSPTDistance, vector<int>& vSPTParent,vector<int>& vSPTHeight, vector<int>& vSPTParentEdge, vector<vector<int> >& vSPT)
+void Graph::SPT(int root, int ID2, vector<int>& vSPTDistance, vector<int>& vSPTParent,vector<int>& vSPTHeight, vector<int>& vSPTParentEdge, vector<vector<int> >& vSPT)
 {
+    int boundDistance = 999999999;
     benchmark::heap<2, int, int> queue(nodeNum);
     queue.update(root, 0);
 
@@ -17,6 +18,14 @@ void Graph::SPT(int root, vector<int>& vSPTDistance, vector<int>& vSPTParent,vec
         int topDistance;
         queue.extract_min(topNodeID, topDistance);
         vbVisited[topNodeID] = true;
+        if(topNodeID == ID2)
+        {
+            boundDistance = 1.2 * topDistance;
+            //boundDistance = 50442;
+            //cout << boundDistance << endl;
+        }
+        if(topDistance > boundDistance)
+            break;
         for(int i = 0; i < (int)adjList[topNodeID].size(); i++)
         {
             neighborNodeID = adjList[topNodeID][i].first;
@@ -36,11 +45,13 @@ void Graph::SPT(int root, vector<int>& vSPTDistance, vector<int>& vSPTParent,vec
             }
         }
     }
+
     //Construct SPT
     for(int i = 0; i < nodeNum; i++)
         if(vSPTParent[i] != -1)
             vSPT[vSPTParent[i]].push_back(i);
 }
+
 
 void Graph::rSPT(int root, vector<int>& vSPTDistance, vector<int>& vSPTParent, vector<int>& vSPTParentEdge, vector<vector<int> >& vSPT)
 {
@@ -83,6 +94,7 @@ void Graph::rSPT(int root, vector<int>& vSPTDistance, vector<int>& vSPTParent, v
         if(vSPTParent[i] != -1)
             vSPT[vSPTParent[i]].push_back(i);
 }
+
 
 vector<int> Graph::makeRMQDFS(int p, vector<vector<int> >& vSPT, vector<int>& vSPTParent){
     stack<int> sDFS;
@@ -144,7 +156,10 @@ vector<vector<int>> Graph::makeRMQ(int p, vector<vector<int> >& vSPT, vector<int
 }
 
 int Graph::LCAQuery(int _p, int _q, vector<vector<int> >& vSPT, vector<int>& vSPTHeight, vector<int>& vSPTParent){
+    //int p = toRMQ[_p], q = toRMQ[_q];
     int p = _p, q = _q;
+    //cout << p << "..." << q << endl;
+    //cout << EulerSeq[p] << "," << vSPTHeight[114572] << endl;
     if (p > q){
         int x = p;
         p = q;
@@ -168,7 +183,6 @@ int Graph::readUSMap(string filename)
     if(!inGraph)
         cout << "Cannot open Map " << filename << endl;
     cout << "Reading " << filename << endl;
-
     string line;
     do
     {
@@ -192,11 +206,11 @@ int Graph::readUSMap(string filename)
     string a;
     while(!inGraph.eof())
     {
-		vector<string> vs;
-		boost::split(vs,line,boost::is_any_of(" "),boost::token_compress_on);
-		ID1 = stoi(vs[1]) - 1;
-		ID2 = stoi(vs[2]) - 1;
-		length = stoi(vs[3]);
+        vector<string> vs;
+        boost::split(vs,line,boost::is_any_of(" "),boost::token_compress_on);
+        ID1 = stoi(vs[1]) - 1;
+        ID2 = stoi(vs[2]) - 1;
+        length = stoi(vs[3]);
 
         struct Edge e;
         e.ID1 = ID1;
@@ -227,6 +241,7 @@ int Graph::readUSMap(string filename)
 
     vbISO.assign(nodeNum, false);
     inGraph.close();
+    //cout << "Reading Finish" << endl;
 
     return nodeNum;
 }
@@ -346,4 +361,3 @@ int Graph::iBoundingAstar(int ID1, int ID2, unordered_set<int>& sRemovedNode, ve
 
     return vDistance[ID2];
 }
-

@@ -13,7 +13,7 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
     vector<int> vSPTParentEdge(nodeNum, -1);
     vector<int> vTmp;
     vector<vector<int> > vSPT(nodeNum, vTmp); //Tree from root
-    SPT(ID1, vSPTDistance, vSPTParent,vSPTHeight, vSPTParentEdge, vSPT);
+    SPT(ID1, ID2, vSPTDistance, vSPTParent,vSPTHeight, vSPTParentEdge, vSPT);
 
     vector<int> vEdgeReducedLength(vEdge.size(), INF);
     for(int i = 0; i < (int)vEdge.size(); i++)
@@ -133,24 +133,24 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
                         }
                     }
 					//Sim 1
-                    //sim1 = addLength / (kResults[i] + topPathDistance - addLength);
+                    sim1 = addLength / (kResults[i] + topPathDistance - addLength);
 					
 					//Sim 2 
 					//sim1 = addLength / (2*kResults[i]) + addLength / (2*topPathDistance);
 
 					//Sim 3
-					//sim1 = sqrt((addLength*addLength) / ((double)kResults[i]*(double)topPathDistance)); 
-					
+					//sim1 = sqrt((addLength*addLength) / ((double)kResults[i]*(double)topPathDistance));
+
 					//Sim 4
 					/*int maxLength;
-					if(addLength > topPathDistance)
-						maxLength = addLength;
+					if(kResults[i] > topPathDistance)
+						maxLength = kResults[i];
 					else
 						maxLength = topPathDistance;
 					sim1 = addLength / maxLength;*/
 
 					//Sim 5
-					sim1 = addLength / kResults[i];
+//					sim1 = addLength / kResults[i];
 					
                     addLength = 0;
                     if (sim1 > t)
@@ -162,7 +162,7 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
 				time_span = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
 				SimTime += time_span.count(); 
                 if (sim1 <= t) {
-                    cout << "sim: " << sim1 << " topPathID: " << topPathID<< endl;
+                    //cout << "sim: " << sim1 << " topPathID: " << topPathID<< endl;
                     kResults.push_back(topPathDistance);
                     vvResult.push_back(vvPathCandidateEdge[topPathID]);
                     vkPath.push_back(vvPathCandidate[topPathID]);
@@ -173,6 +173,7 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
 						pTmp2.insert(*ie);
 					}
 					pResult.push_back(pTmp2);
+					//vResultThreshold.push_back(vDistance[topPathID] * t);
                 }
             }
         }
@@ -240,7 +241,6 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
                         int eID1 = vEdge[reID].ID1;
                         int dTmp = distTmp + vEdge[reID].length;
 
-						//loop Test
                         if(sE.find(eID1) != sE.end()) //Loop Test
                             continue;
 
@@ -286,6 +286,7 @@ int Graph::eKSPNew(int ID1, int ID2, int k, vector<int>& kResults, vector<vector
                 }
 
                 vmArc.push_back(mArcTmp);
+                //cout << mArcTmp.size() << endl;
                 vvPathCandidate.push_back(vPath);
                 vvPathCandidateEdge.push_back(vPathEdge);
             }

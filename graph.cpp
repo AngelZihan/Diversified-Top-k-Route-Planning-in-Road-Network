@@ -118,7 +118,7 @@ vector<int> Graph::makeRMQDFS(int p, vector<vector<int> >& vSPT, vector<int>& vS
             sDFS.pop();
         }
     }
-    rEulerSeq.assign(EulerSeq.size(),-1);
+    rEulerSeq.assign(nodeNum.size(),-1);
     for(int i = 0; i < EulerSeq.size(); i++)
         rEulerSeq[EulerSeq[i]] = i;
     return EulerSeq;

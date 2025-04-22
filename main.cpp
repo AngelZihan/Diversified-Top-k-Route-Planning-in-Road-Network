@@ -21,7 +21,7 @@ int main()
 	vector<int> ID1List;
 	vector<int> ID2List;
 //	string queryFilename = "/Users/angel/CLionProjects/Project3_Github/USA-NY-Q1.txt";
-    string queryFilename = "./USA-NY-Q1.txt";
+    string queryFilename = "./USA-NY-Q2.txt";
 	ifstream inGraph(queryFilename);	
     if(!inGraph)
         cout << "Cannot open Map " << queryFilename << endl;
@@ -129,7 +129,7 @@ int main()
         vector<vector<int> >vkPath;
         g.FindRepeatedPath(vkPath);
 
-		kResults.clear();
+		/*kResults.clear();
         vkPath.clear();
         t1 = std::chrono::high_resolution_clock::now();
         g.cTKSPD(ID1, ID2, k, kResults, t, countNumber, popPath);
@@ -179,7 +179,7 @@ int main()
 			cout << "Path Average Length: " << cTKSPDPathAverageLength / kResults.size() << endl;
 			cout << endl;
 			cout << endl;
-		}
+		}*/
 
 
 
@@ -212,7 +212,7 @@ int main()
 
 		//eKSPCompare!
 		
-		kResults.clear();
+		/*kResults.clear();
 		AveSim = 0;
         vkPath.clear();
 		sim.clear();
@@ -254,7 +254,7 @@ int main()
 			cout << "Path Average Length: " << eKSPComparePathAverageLength / kResults.size() << endl;
 			cout << endl;
 			cout << endl;
-		}
+		}*/
 
 
 		/*kResults.clear();
@@ -321,7 +321,7 @@ int main()
 		}*/
     }
 
-	sumTime = 0;
+	/*sumTime = 0;
     sumCount = 0;
     sumPop = 0;
 	sumLength = 0;
@@ -345,9 +345,9 @@ int main()
 	cTKSPDTimeStd = sqrt(cTKSPDTimeStd / cTKSPDTime.size());
 	cTKSPDLengthStd = cTKSPDLengthStd /cTKSPDTime.size();
     cout  << "cTKSPD Average Time: " << meanTime << "\tcTKSPD Average Count:" << meanCount << "\tcTKSPD Average Pop: " << meanPop << " \tcTKSPD Average Length: " << meanLength << " \t TimeStd: " << cTKSPDTimeStd << " LengthStd: " << cTKSPDLengthStd <<endl;
+*/
 
 
-/*
     sumTime = 0;
     sumCount = 0;
     sumPop = 0;
@@ -368,7 +368,7 @@ int main()
 	meanSimTime = sumSimTime / eKSPSimTime.size();
 	cout << "Pair Size:" << eKSPTime.size() << endl;
     cout  <<"eKSP Average Time: " << meanTime << "\teKSP Average Count: " << meanCount << "\teKSP Average Pop: " << meanPop << " \teKSP Average Length: " << meanLength << " \t eKSP SimTime: " << meanSimTime << endl;
-*/
+
 
 
 /*

@@ -20,7 +20,7 @@ void Graph::SPT(int root, int ID2, vector<int>& vSPTDistance, vector<int>& vSPTP
         vbVisited[topNodeID] = true;
         if(topNodeID == ID2)
         {
-            boundDistance = 1.2 * topDistance;
+            boundDistance = 1.3 * topDistance;
             //boundDistance = 50442;
             //cout << boundDistance << endl;
         }

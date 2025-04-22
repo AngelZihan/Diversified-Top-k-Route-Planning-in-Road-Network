@@ -12,7 +12,7 @@ int Graph::eKSPPrune(int ID1, int ID2, int k, vector<int>& kResults, vector<vect
     vector<int> vSPTChildren(nodeNum, -1);
     vector<int> vTmp;
     vector<vector<int>> vSPT(nodeNum, vTmp); //Tree from root
-    SPT(ID1, vSPTDistance, vSPTParent, vSPTHeight, vSPTParentEdge, vSPT);
+    SPT(ID1, ID2, vSPTDistance, vSPTParent, vSPTHeight, vSPTParentEdge, vSPT);
 
 	bool bCountNumber = true;
 	vector<vector<int> > vkPath2;

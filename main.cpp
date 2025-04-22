@@ -103,8 +103,8 @@ int main()
 	vector<int> eKSPIntervalCount;
 	vector<int> eKSPIntervalPop;
 	bool ebool = true;
-//    for (int i = 0; i < ID1List.size(); ++i) {
-    for (int i = 0; i < 1; ++i) {
+    for (int i = 0; i < ID1List.size(); ++i) {
+//    for (int i = 0; i < 1; ++i) {
 
 		ID1 = ID1List[i];
 		ID2 = ID2List[i];
